@@ -19,12 +19,16 @@ public class conectaDAO {
     
     public Connection connectDB(){
         Connection conn = null;
+        String url = "jdbc:mysql://127.0.0.1:3306/leiloes_tdsat"; 
+        String user = "root";
+        String password = "12345";
         
         try {
-        
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/uc11?user=root&password=");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(url, user, password);
+            return conn;
             
-        } catch (SQLException erro){
+        } catch (SQLException | ClassNotFoundException erro){
             JOptionPane.showMessageDialog(null, "Erro ConectaDAO" + erro.getMessage());
         }
         return conn;
