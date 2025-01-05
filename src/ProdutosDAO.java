@@ -12,22 +12,36 @@ import java.sql.PreparedStatement;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
 public class ProdutosDAO {
+    private conectaDAO conexao;
+    private Connection conn;
+    private PreparedStatement prep;
     
-    Connection conn;
-    PreparedStatement prep;
-    ResultSet resultset;
+    public ProdutosDAO(){
+        this.conexao = new conectaDAO();
+        this.conn = this.conexao.connectDB();
+    }
+    
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
     public void cadastrarProduto (ProdutosDTO produto){
-        
-        
-        //conn = new conectaDAO().connectDB();
-        
-        
+        int status;
+        try{
+            prep = this.conn.prepareStatement("INSERT INTO produtos(nome, valor, status) VALUES(?,?,?)");
+            
+            prep.setString(1, produto.getNome());
+            prep.setInt(2, produto.getValor());
+            prep.setString(3, produto.getStatus());
+            
+            status = prep.executeUpdate();
+            
+        }catch(SQLException e){
+            System.out.println("Falha ao cadastrar produto: "+ e.getMessage());
+        }  
     }
     
     public ArrayList<ProdutosDTO> listarProdutos(){
