@@ -1,3 +1,6 @@
+
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -157,15 +160,20 @@ public class CadastroVIEW extends javax.swing.JFrame {
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         ProdutosDTO produto = new ProdutosDTO();
-        String nome = cadastroNome.getText();
-        String valor = cadastroValor.getText();
-        String status = "A Venda";
-        produto.setNome(nome);
-        produto.setValor(Integer.parseInt(valor));
-        produto.setStatus(status);
+        conectaDAO conn = new conectaDAO();
+        if(!emptyFields()){
+            conn.connectDB();
+            String nome = cadastroNome.getText();
+            String valor = cadastroValor.getText();
+            String status = "A Venda";
+            produto.setNome(nome);
+            produto.setValor(Integer.parseInt(valor));
+            produto.setStatus(status);
 
-        ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.cadastrarProduto(produto);
+            ProdutosDAO produtodao = new ProdutosDAO();
+            produtodao.cadastrarProduto(produto);
+            JOptionPane.showMessageDialog(this, "Produto cadastrado com sucesso.");
+        }
 
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
@@ -217,4 +225,15 @@ public class CadastroVIEW extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables
+
+    public boolean emptyFields(){
+        boolean isEmpty = true;
+        if(cadastroNome.getText().trim().isEmpty() || cadastroValor.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Por favor preencha todos os campos antes de cadastrar.");
+        }else{
+            isEmpty = false;
+        }
+        return isEmpty;
+    }
+
 }
