@@ -25,9 +25,7 @@ public class ProdutosDAO {
         this.conexao = new conectaDAO();
         this.conn = this.conexao.connectDB();
     }
-    
-    ArrayList<ProdutosDTO> listagem = new ArrayList<>();
-    
+
     public void cadastrarProduto (ProdutosDTO produto){
         int status;
         try{
@@ -45,11 +43,24 @@ public class ProdutosDAO {
     }
     
     public ArrayList<ProdutosDTO> listarProdutos(){
-        
+        ArrayList<ProdutosDTO> listagem = new ArrayList<>();
+        try{
+            prep = this.conn.prepareStatement("SELECT * FROM produtos");
+            
+            ResultSet rs = prep.executeQuery();
+            while(rs.next()){
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(rs.getInt("id"));
+                produto.setNome(rs.getString("nome"));
+                produto.setValor(rs.getInt("valor"));
+                produto.setStatus(rs.getString("status"));
+                
+                listagem.add(produto);
+            }
+            
+        }catch(SQLException e){
+            System.out.println("Falha ao listar produtos: "+ e.getMessage());
+        }
         return listagem;
-    }
-    
-    
-    
-        
+    }     
 }
