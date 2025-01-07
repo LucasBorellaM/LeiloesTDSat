@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -152,12 +153,23 @@ public class listagemVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-        String id = id_produto_venda.getText();
+        if(!emptyFields()){
+            String id = id_produto_venda.getText();
+            int resposta;
+            
+            conectaDAO conn = new conectaDAO();
+            ProdutosDAO produtosdao = new ProdutosDAO();
 
-        ProdutosDAO produtosdao = new ProdutosDAO();
+            conn.connectDB();
+            resposta = produtosdao.venderProduto(Integer.parseInt(id));
+            if(resposta == 1){
+                JOptionPane.showMessageDialog(this, "Status do produto de id "+ id +" trocado para vendido");
+            }else{
+                JOptionPane.showMessageDialog(this, "Falha ao atualizar status");
+            }
 
-        //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos();
+            listarProdutos();
+        }
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
@@ -233,8 +245,17 @@ public class listagemVIEW extends javax.swing.JFrame {
             }
         } catch (Exception e) {
         }
-    
     }
+    
+    public boolean emptyFields(){
+        boolean isEmpty = true;
+        if(id_produto_venda.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Por favor preencha o campo vender produto antes de vender");
+        }else{
+            isEmpty = false;
+        }
+        return isEmpty;
+    }    
 
 
 }
