@@ -62,5 +62,20 @@ public class ProdutosDAO {
             System.out.println("Falha ao listar produtos: "+ e.getMessage());
         }
         return listagem;
-    }     
+    }  
+    
+    public int venderProduto(int id){
+        try{
+            prep = this.conn.prepareStatement("UPDATE produtos SET status =? WHERE id =?");
+            
+            prep.setString(1, "vendido");
+            prep.setInt(2, id);
+            
+            int status = prep.executeUpdate();
+            return status;
+        }catch(SQLException e){
+            System.out.println("Falha ao vender produto: "+ e.getMessage());
+            return e.getErrorCode();
+        }
+    }
 }
